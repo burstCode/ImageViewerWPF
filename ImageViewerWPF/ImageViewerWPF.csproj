@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="drag-and-drop-file-icon.png" />
+    <None Remove="drag-and-drop-folder-icon.png" />
+    <None Remove="images-viewer-app-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="drag-and-drop-file-icon.png" />
+    <Resource Include="drag-and-drop-folder-icon.png" />
+    <Resource Include="images-viewer-app-icon.png" />
+  </ItemGroup>
+
+</Project>

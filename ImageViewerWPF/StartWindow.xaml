@@ -1,0 +1,64 @@
+﻿<Window x:Class="ImageViewerWPF.StartWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageViewerWPF"
+        mc:Ignorable="d"
+        Title="Просмотрщик фотографий" Height="400" Width="500"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        Icon="/images-viewer-app-icon.png"
+        AllowDrop="True"
+        Style="{StaticResource DragDropActiveWindow}"
+        local:DragAndDropHelper.IsEnabled="True">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*" />
+            <RowDefinition Height="15*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Открыть папку -->
+        <StackPanel Grid.Column="1"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
+            <Image Source="/drag-and-drop-folder-icon.png"
+                   Width="100"
+                   Height="100" />
+            <Button x:Name="OpenFolderButton"
+                    Content="Открыть папку"
+                    Width="110"
+                    Height="40" 
+                    Style="{StaticResource StartWindowButton}" />
+        </StackPanel>
+
+        <!-- Открыть файл -->
+        <StackPanel Grid.Column="2"
+                    VerticalAlignment="Bottom"
+                    HorizontalAlignment="Right"
+                    Orientation="Vertical">
+            <Image Source="/drag-and-drop-file-icon.png"
+                   Width="100"
+                   Height="100" />
+            <Button x:Name="OpenFileButton"
+                    Content="Открыть файл"
+                    Width="110"
+                    Height="40"
+                    Style="{StaticResource StartWindowButton}" />
+        </StackPanel>
+        
+        <TextBlock Grid.Column="1"
+                   Grid.Row="1"
+                   Grid.ColumnSpan="2"
+                   Text="Или перетащите в окно" 
+                   Style="{StaticResource DragAndDropTextBlock}" />
+    </Grid>
+</Window>
