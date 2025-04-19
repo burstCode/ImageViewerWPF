@@ -55,7 +55,11 @@ namespace ImageViewerWPF
             if (imageFiles.Count > 0)
             {
                 // Открываем просмотрщик с найденными изображениями
-                //OpenViewer(imageFiles);
+                OpenViewer(imageFiles);
+            }
+            else
+            {
+                MessageBox.Show("Пошел нахуй!", "Уебок", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -71,6 +75,13 @@ namespace ImageViewerWPF
             string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif" };
             return Directory.EnumerateFiles(directoryPath, "*.*", SearchOption.AllDirectories)
                            .Where(f => imageExtensions.Contains(Path.GetExtension(f).ToLower()));
+        }
+
+        private void OpenViewer(List<string> imageFiles)
+        {
+            MainWindow mainWindow = new(imageFiles);
+            mainWindow.Show();
+            Close();
         }
     }
 }

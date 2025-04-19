@@ -14,7 +14,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <ColorAnimation Storyboard.TargetProperty="Background.Color"
-                                            To="#F0F0F0" Duration="0:0:0.2"/>
+                                                To="#F0F0F0" Duration="0:0:0.2"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
@@ -22,7 +22,7 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <ColorAnimation Storyboard.TargetProperty="Background.Color"
-                                            To="White" Duration="0:0:0.2"/>
+                                                To="White" Duration="0:0:0.2"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.ExitActions>
@@ -133,10 +133,10 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <ThicknessAnimation Storyboard.TargetProperty="Margin" 
-                                               To="0,0,0,70" Duration="0:0:0.2"/>
+                                                    To="0,0,0,70" Duration="0:0:0.2"/>
                                 <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="TextDecorations">
                                     <DiscreteObjectKeyFrame KeyTime="0:0:0.2" 
-                                                       Value="{x:Static TextDecorations.Underline}"/>
+                                                            Value="{x:Static TextDecorations.Underline}"/>
                                 </ObjectAnimationUsingKeyFrames>
                             </Storyboard>
                         </BeginStoryboard>
@@ -154,6 +154,56 @@
                         </BeginStoryboard>
                     </DataTrigger.ExitActions>
                 </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Стиль для главного меню -->
+        <Style x:Key="NiceMenu" TargetType="Menu">
+            <Setter Property="FontFamily" Value="Inter" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="DemiBold" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+
+        <!-- Стиль для элементов -->
+        <Style x:Key="MenuItemStyle" TargetType="MenuItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Стиль для надписей в основном просмотра -->
+        <Style x:Key="MainWindowLabel" TargetType="Label">
+            <Setter Property="FontFamily" Value="Inter" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="DemiBold" />
+        </Style>
+
+        <!-- Стиль для полупрозрачных кнопок навигации -->
+        <Style x:Key="TransparentNavButton" TargetType="Button">
+            <Setter Property="Background" Value="#33000000"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Height" Value="50"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        CornerRadius="25">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#66000000"/>
+                    <Setter Property="Cursor" Value="Hand"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
 
