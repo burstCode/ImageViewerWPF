@@ -37,6 +37,8 @@
                 <Separator />
                 <MenuItem Header="Перевернуть по горизонтали" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
                 <MenuItem Header="Перевернуть по вертикали" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <Separator />
+                <MenuItem Header="Сбросить преобразования" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
             </MenuItem>
             <MenuItem Header="Режим" Style="{StaticResource MenuItemStyle}">
                 <MenuItem Header="Обычный" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
@@ -73,14 +75,14 @@
                 Style="{StaticResource TransparentNavButton}"
                 Content="❮"
                 ToolTip="Предыдущее изображение"
-                Click="PrevButton_Click" />
+                Click="Button_Click" />
 
         <Button x:Name="NextButton" 
                 Grid.Row="2" Grid.Column="2"
                 Style="{StaticResource TransparentNavButton}"
                 Content="❯"
                 ToolTip="Следующее изображение"
-                Click="NextButton_Click" />
+                Click="Button_Click" />
 
         <Separator Grid.Row="3" Grid.ColumnSpan="3" />
 

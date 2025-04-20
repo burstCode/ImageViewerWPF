@@ -15,6 +15,7 @@ namespace ImageViewerWPF
         private int _imageIndex;
         private string _currentFileName;
         private string _currentFileCounter;
+        private string _currentImagePath => _imageFiles.Count > 0 ? _imageFiles[_imageIndex] : null;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -38,7 +39,7 @@ namespace ImageViewerWPF
             }
         }
 
-        public BitmapImage CurrentImage { get; private set; }
+        public Image CurrentImage { get; private set; }
 
         public MainWindow()
         {
@@ -74,12 +75,14 @@ namespace ImageViewerWPF
             {
                 var bitmap = new BitmapImage();
                 bitmap.BeginInit();
-                bitmap.UriSource = new Uri(_imageFiles[_imageIndex]);
+                bitmap.UriSource = new Uri(_currentImagePath);
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.EndInit();
-                CurrentImage = bitmap;
 
-                CurrentFileName = Path.GetFileName(_imageFiles[_imageIndex]);
+                ImageHelper.InitializeImage(_currentImagePath, bitmap);
+                CurrentImage = ImageHelper.ApplyTransforms(_currentImagePath, CurrentImageView);
+
+                CurrentFileName = Path.GetFileName(_currentImagePath);
                 CurrentFileCounter = $"{_imageIndex + 1}/{_imageFiles.Count}";
             }
             catch (Exception ex)
@@ -96,23 +99,35 @@ namespace ImageViewerWPF
             NextButton.IsEnabled = _imageIndex < _imageFiles.Count - 1;
         }
 
-        private void PrevButton_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (_imageIndex > 0)
-            {
-                _imageIndex--;
-                LoadImage();
-                UpdateNavigationButtons();
-            }
-        }
+            var pressedButton = sender as Button;
+            if (pressedButton == null) { return; }
 
-        private void NextButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_imageIndex < _imageFiles.Count - 1)
+            switch (pressedButton.Content)
             {
-                _imageIndex++;
-                LoadImage();
-                UpdateNavigationButtons();
+                case "❮":
+                    {
+                        if (_imageIndex > 0)
+                        {
+                            _imageIndex--;
+                            LoadImage();
+                            UpdateNavigationButtons();
+                        }
+
+                        break;
+                    }
+                case "❯":
+                    {
+                        if (_imageIndex < _imageFiles.Count - 1)
+                        {
+                            _imageIndex++;
+                            LoadImage();
+                            UpdateNavigationButtons();
+                        }
+
+                        break;
+                    }
             }
         }
 
@@ -160,18 +175,32 @@ namespace ImageViewerWPF
                     }
                 case "Поворот на 90 градусов по часовой стрелке":
                     {
+                        ImageHelper.Rotate90DegreesClockwise(_currentImagePath, CurrentImageView);
+
                         break;
                     }
                 case "Поворот на 90 градусов против часовой стрелке":
                     {
+                        ImageHelper.Rotate90DegreesCounterClockwise(_currentImagePath, CurrentImageView);
+
                         break;
                     }
                 case "Перевернуть по горизонтали":
                     {
+                        ImageHelper.FlipHorizontally(_currentImagePath, CurrentImageView);
+
                         break;
                     }
                 case "Перевернуть по вертикали":
                     {
+                        ImageHelper.FlipVertically(_currentImagePath, CurrentImageView);
+
+                        break;
+                    }
+                case "Сбросить преобразования":
+                    {
+                        ImageHelper.ResetTransforms(_currentImagePath, CurrentImageView);
+
                         break;
                     }
                 case "Масштаб 1:1 (пиксель-в-пиксель)":
