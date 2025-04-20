@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Просмотрщик файлов" Height="600" Width="800"
         WindowStartupLocation="CenterScreen">
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -16,69 +16,77 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="24*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
-        
+
         <!-- Менюшечка с кучей функций -->
         <Menu Grid.Row="0" Grid.ColumnSpan="3"
               Style="{StaticResource NiceMenu}">
             <MenuItem Header="Файл" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Открыть файл" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="Открыть папку" Style="{StaticResource MenuItemStyle}" />
+                <MenuItem Header="Открыть файл" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="Открыть папку" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <Separator />
+                <MenuItem Header="Закрыть" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
             </MenuItem>
             <MenuItem Header="Просмотр" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Поворот на 90 градусов по часовой стрелке" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="Поворот на 90 градусов против часовой стрелке" Style="{StaticResource MenuItemStyle}" />
+                <MenuItem Header="Поворот на 90 градусов по часовой стрелке" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="Поворот на 90 градусов против часовой стрелке" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
                 <Separator />
-                <MenuItem Header="Перевернуть по горизонтали" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="Перевернуть по вертикали" Style="{StaticResource MenuItemStyle}" />
+                <MenuItem Header="Перевернуть по горизонтали" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="Перевернуть по вертикали" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
             </MenuItem>
             <MenuItem Header="Режим" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="Обычный" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="Масштаб 1:1 (пиксель-в-пиксель)" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="Вписать в окно с сохранением пропорций" Style="{StaticResource MenuItemStyle}" />
+                <MenuItem Header="Обычный" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="Масштаб 1:1 (пиксель-в-пиксель)" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="Вписать в окно с сохранением пропорций" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
             </MenuItem>
             <MenuItem Header="Масштаб" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="25%" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="50%" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="75%" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="100%" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="200%" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="300%" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="400%" Style="{StaticResource MenuItemStyle}" />
-                <MenuItem Header="500%" Style="{StaticResource MenuItemStyle}" />
+                <MenuItem Header="25%" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="50%" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="75%" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="100%" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="200%" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="300%" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="400%" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
+                <MenuItem Header="500%" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
             </MenuItem>
             <MenuItem Header="Свойства" Style="{StaticResource MenuItemStyle}">
-                <MenuItem Header="О текущем файле" Style="{StaticResource MenuItemStyle}" />
+                <MenuItem Header="О текущем файле" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
                 <Separator />
-                <MenuItem Header="О программе" Style="{StaticResource MenuItemStyle}" />
+                <MenuItem Header="О программе" Style="{StaticResource MenuItemStyle}" Click="MenuItem_Click" />
             </MenuItem>
         </Menu>
 
+        <Separator Grid.Row="1" Grid.ColumnSpan="3" />
+
         <Image x:Name="CurrentImageView" 
-               Grid.Row="1" Grid.Column="1"
+               Grid.Row="2" Grid.Column="1"
                Source="{Binding CurrentImage}"
                Stretch="Uniform"
                RenderOptions.BitmapScalingMode="HighQuality" />
 
         <Button x:Name="PrevButton"
-                Grid.Row="1" Grid.Column="0"
+                Grid.Row="2" Grid.Column="0"
                 Style="{StaticResource TransparentNavButton}"
                 Content="❮"
                 ToolTip="Предыдущее изображение"
                 Click="PrevButton_Click" />
 
         <Button x:Name="NextButton" 
-                Grid.Row="1" Grid.Column="2"
+                Grid.Row="2" Grid.Column="2"
                 Style="{StaticResource TransparentNavButton}"
                 Content="❯"
                 ToolTip="Следующее изображение"
                 Click="NextButton_Click" />
 
+        <Separator Grid.Row="3" Grid.ColumnSpan="3" />
+
         <!-- Панель статуса -->
         <Label x:Name="CurrentFileLabel" 
-               Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+               Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"
                VerticalContentAlignment="Center" 
                HorizontalContentAlignment="Left"
                Margin="10, 0, 0, 0"
@@ -86,7 +94,7 @@
                Style="{StaticResource MainWindowLabel}" />
 
         <Label x:Name="CurrentFileCounterLabel" 
-               Grid.Row="2" Grid.Column="1"
+               Grid.Row="4" Grid.Column="1"
                VerticalContentAlignment="Center" 
                HorizontalContentAlignment="Center" 
                Content="{Binding CurrentFileCounter}"

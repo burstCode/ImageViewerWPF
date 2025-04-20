@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Windows.Controls;
 
 namespace ImageViewerWPF
 {
@@ -112,6 +113,115 @@ namespace ImageViewerWPF
                 _imageIndex++;
                 LoadImage();
                 UpdateNavigationButtons();
+            }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var pressedMenuItem = sender as MenuItem;
+
+            if (pressedMenuItem == null) { MessageBox.Show("Произошла ошибка при обработке нажатия меню"); return; }
+
+            switch (pressedMenuItem.Header)
+            {
+                case "Открыть файл":
+                    {
+                        var folders = FileHelper.OpenFolder();
+                        if (folders == null) { break; }
+
+                        var imageFiles = FileHelper.ProceedFiles(folders);
+                        if (imageFiles == null) { break; }
+
+                        FileHelper.OpenViewer(imageFiles);
+                        Close();
+
+                        break;
+                    }
+                case "Открыть папку":
+                    {
+                        var files = FileHelper.OpenFile();
+                        if (files == null) { break; }
+
+                        var imageFiles = FileHelper.ProceedFiles(files);
+                        if (imageFiles == null) { break; }
+
+                        FileHelper.OpenViewer(imageFiles);
+                        Close();
+
+                        break;
+                    }
+                case "Закрыть":
+                    {
+                        StartWindow startWindow = new StartWindow();
+                        startWindow.Show();
+                        Close();
+
+                        break;
+                    }
+                case "Поворот на 90 градусов по часовой стрелке":
+                    {
+                        break;
+                    }
+                case "Поворот на 90 градусов против часовой стрелке":
+                    {
+                        break;
+                    }
+                case "Перевернуть по горизонтали":
+                    {
+                        break;
+                    }
+                case "Перевернуть по вертикали":
+                    {
+                        break;
+                    }
+                case "Масштаб 1:1 (пиксель-в-пиксель)":
+                    {
+                        break;
+                    }
+                case "Вписать в окно с сохранением пропорций":
+                    {
+                        break;
+                    }
+                case "25%":
+                    {
+                        break;
+                    }
+                case "50%":
+                    {
+                        break;
+                    }
+                case "75%":
+                    {
+                        break;
+                    }
+                case "100%":
+                    {
+                        break;
+                    }
+                case "200%":
+                    {
+                        break;
+                    }
+                case "300%":
+                    {
+                        break;
+                    }
+                case "400%":
+                    {
+                        break;
+                    }
+                case "500%":
+                    {
+                        break;
+                    }
+                case "О текущем файле":
+                    {
+                        break;
+                    }
+                case "О программе":
+                    {
+                        break;
+                    }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace ImageViewerWPF
 {
@@ -28,78 +29,60 @@ namespace ImageViewerWPF
             base.OnDrop(e);
             if (DragAndDropHelper.IsValidDragData(e.Data))
             {
-                // Ваша логика обработки сброса файлов
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                ProcessDroppedFiles(files);
+                
+                var imageFiles = FileHelper.ProceedFiles(files);
+                if (imageFiles == null) { return; }
+
+                FileHelper.OpenViewer(imageFiles);
+
+                Close();
             }
             e.Handled = true;
         }
 
-        private void ProcessDroppedFiles(string[] paths)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            List<string> imageFiles = new List<string>();
+            var pressedButton = sender as Button;
 
-            foreach (string path in paths)
+            if (pressedButton == null) { MessageBox.Show("Произошла ошибка при обработке нажатия кнопки"); return; }
+
+            switch (pressedButton.Content)
             {
-                if (File.Exists(path))
-                {
-                    if (IsImageFile(path))
-                        imageFiles.Add(path);
-                }
-                else if (Directory.Exists(path))
-                {
-                    imageFiles.AddRange(GetImageFilesFromDirectory(path));
-                }
+                case "Открыть папку":
+                    {
+                        var folders = FileHelper.OpenFolder();
+                        if (folders == null) { break; }
+
+                        var imageFiles = FileHelper.ProceedFiles(folders);
+                        if (imageFiles == null) { break; }
+
+                        FileHelper.OpenViewer(imageFiles);
+                        Close();
+
+                        break;
+                    }
+                case "Открыть файл":
+                    {
+                        var files = FileHelper.OpenFile();
+                        if (files == null) { break; }
+
+                        var imageFiles = FileHelper.ProceedFiles(files);
+                        if (imageFiles == null) { break; }
+
+                        FileHelper.OpenViewer(imageFiles);
+                        Close();
+
+                        break;
+                    }
+                default:
+                    {
+                        MessageBox.Show("Не обнаружено изображений формата \".jpg\", \".jpeg\", \".png\", \".bmp\", \".gif\"");
+                        return;
+                    }
             }
 
-            if (imageFiles.Count > 0)
-            {
-                // Открываем просмотрщик с найденными изображениями
-                OpenViewer(imageFiles);
-            }
-            else
-            {
-                MessageBox.Show("Пошел нахуй!", "Уебок", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private bool IsImageFile(string filePath)
-        {
-            string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif" };
-            string extension = Path.GetExtension(filePath).ToLower();
-            return imageExtensions.Contains(extension);
-        }
-
-        private IEnumerable<string> GetImageFilesFromDirectory(string directoryPath)
-        {
-            string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif" };
-            return Directory.EnumerateFiles(directoryPath, "*.*", SearchOption.AllDirectories)
-                           .Where(f => imageExtensions.Contains(Path.GetExtension(f).ToLower()));
-        }
-
-        private void OpenViewer(List<string> imageFiles)
-        {
-            MainWindow mainWindow = new(imageFiles);
-            mainWindow.Show();
-            Close();
-        }
-
-        private void OpenFolderButton_Click(object sender, RoutedEventArgs e)
-        {
-            var folders = FileHelper.OpenFolder();
-
-            if (folders == null) { MessageBox.Show("Не было выбрано никаких папок"); return; }
-
-            ProcessDroppedFiles(folders);
-        }
-
-        private void OpenFileButton_Click(object sender, RoutedEventArgs e)
-        {
-            var files = FileHelper.OpenFile();
-
-            if (files == null) { MessageBox.Show("Не было выбрано никаких файлов"); return; }
-
-            ProcessDroppedFiles(files);
+            return;
         }
     }
 }
