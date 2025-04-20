@@ -83,5 +83,23 @@ namespace ImageViewerWPF
             mainWindow.Show();
             Close();
         }
+
+        private void OpenFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            var folders = FileHelper.OpenFolder();
+
+            if (folders == null) { MessageBox.Show("Не было выбрано никаких папок"); return; }
+
+            ProcessDroppedFiles(folders);
+        }
+
+        private void OpenFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            var files = FileHelper.OpenFile();
+
+            if (files == null) { MessageBox.Show("Не было выбрано никаких файлов"); return; }
+
+            ProcessDroppedFiles(files);
+        }
     }
 }

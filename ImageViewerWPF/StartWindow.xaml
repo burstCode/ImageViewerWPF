@@ -37,7 +37,8 @@
                     Content="Открыть папку"
                     Width="110"
                     Height="40" 
-                    Style="{StaticResource StartWindowButton}" />
+                    Style="{StaticResource StartWindowButton}"
+                    Click="OpenFolderButton_Click" />
         </StackPanel>
 
         <!-- Открыть файл -->
@@ -52,7 +53,8 @@
                     Content="Открыть файл"
                     Width="110"
                     Height="40"
-                    Style="{StaticResource StartWindowButton}" />
+                    Style="{StaticResource StartWindowButton}"
+                    Click="OpenFileButton_Click" />
         </StackPanel>
         
         <TextBlock Grid.Column="1"
