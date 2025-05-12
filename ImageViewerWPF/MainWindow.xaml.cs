@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.IO;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ImageViewerWPF
 {
@@ -16,6 +17,9 @@ namespace ImageViewerWPF
         private string _currentFileName;
         private string _currentFileCounter;
         private string _currentImagePath => _imageFiles.Count > 0 ? _imageFiles[_imageIndex] : null;
+
+        private ImageDisplayMode _currentDisplayMode = ImageDisplayMode.FitToWindow;
+        private double _currentScale = 1.0;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -46,6 +50,8 @@ namespace ImageViewerWPF
             InitializeComponent();
             DataContext = this;
             _imageFiles = new List<string>();
+
+            SizeChanged += MainWindow_SizeChanged;
         }
 
         public MainWindow(List<string> imageFiles) : this()
@@ -61,6 +67,57 @@ namespace ImageViewerWPF
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ApplyDisplayMode();
+        }
+
+        private void ApplyDisplayMode()
+        {
+            if (CurrentImage == null || CurrentImage.Source == null) return;
+
+            switch (_currentDisplayMode)
+            {
+                case ImageDisplayMode.Normal:
+                    ImageScrollViewer.Visibility = Visibility.Visible;
+                    FitImageView.Visibility = Visibility.Collapsed;
+                    CurrentImageView.Stretch = Stretch.None;
+                    CurrentImageView.StretchDirection = StretchDirection.Both;
+                    ApplyScale(_currentScale);
+                    break;
+
+                case ImageDisplayMode.FitToWindow:
+                    ImageScrollViewer.Visibility = Visibility.Collapsed;
+                    FitImageView.Visibility = Visibility.Visible;
+                    break;
+
+                case ImageDisplayMode.PixelPerfect:
+                    ImageScrollViewer.Visibility = Visibility.Visible;
+                    FitImageView.Visibility = Visibility.Collapsed;
+                    CurrentImageView.Stretch = Stretch.None;
+                    CurrentImageView.StretchDirection = StretchDirection.Both;
+                    ApplyScale(1.0);
+                    break;
+            }
+        }
+
+        private void ApplyScale(double scale)
+        {
+            _currentScale = scale;
+
+            if (CurrentImage == null || CurrentImage.Source == null) return;
+
+            var transform = new ScaleTransform(scale, scale);
+            CurrentImageView.LayoutTransform = transform;
+
+            // Обновляем ScrollViewer после изменения масштаба
+            if (ImageScrollViewer.Visibility == Visibility.Visible)
+            {
+                ImageScrollViewer.ScrollToHorizontalOffset(0);
+                ImageScrollViewer.ScrollToVerticalOffset(0);
+            }
+        }
+
         private void LoadImage()
         {
             if (_imageFiles.Count == 0)
@@ -68,6 +125,8 @@ namespace ImageViewerWPF
                 CurrentImage = null;
                 CurrentFileName = "Нет изображений";
                 CurrentFileCounter = "0/0";
+                ImageScrollViewer.Visibility = Visibility.Collapsed;
+                FitImageView.Visibility = Visibility.Collapsed;
                 return;
             }
 
@@ -80,10 +139,16 @@ namespace ImageViewerWPF
                 bitmap.EndInit();
 
                 ImageHelper.InitializeImage(_currentImagePath, bitmap);
+
+                // Устанавливаем источник для обоих Image
                 CurrentImage = ImageHelper.ApplyTransforms(_currentImagePath, CurrentImageView);
+                FitImageView.Source = CurrentImage.Source;
 
                 CurrentFileName = Path.GetFileName(_currentImagePath);
                 CurrentFileCounter = $"{_imageIndex + 1}/{_imageFiles.Count}";
+
+                // Применяем текущий режим отображения
+                ApplyDisplayMode();
             }
             catch (Exception ex)
             {
@@ -203,46 +268,50 @@ namespace ImageViewerWPF
 
                         break;
                     }
+                case "Обычный":
+                    _currentDisplayMode = ImageDisplayMode.Normal;
+                    ApplyDisplayMode();
+                    break;
                 case "Масштаб 1:1 (пиксель-в-пиксель)":
-                    {
-                        break;
-                    }
+                    _currentDisplayMode = ImageDisplayMode.PixelPerfect;
+                    ApplyDisplayMode();
+                    break;
                 case "Вписать в окно с сохранением пропорций":
-                    {
-                        break;
-                    }
+                    _currentDisplayMode = ImageDisplayMode.FitToWindow;
+                    ApplyDisplayMode();
+                    break;
                 case "25%":
-                    {
-                        break;
-                    }
+                    ApplyScale(0.25);
+                    _currentDisplayMode = ImageDisplayMode.Normal;
+                    break;
                 case "50%":
-                    {
-                        break;
-                    }
+                    ApplyScale(0.5);
+                    _currentDisplayMode = ImageDisplayMode.Normal;
+                    break;
                 case "75%":
-                    {
-                        break;
-                    }
+                    ApplyScale(0.75);
+                    _currentDisplayMode = ImageDisplayMode.Normal;
+                    break;
                 case "100%":
-                    {
-                        break;
-                    }
+                    ApplyScale(1.0);
+                    _currentDisplayMode = ImageDisplayMode.Normal;
+                    break;
                 case "200%":
-                    {
-                        break;
-                    }
+                    ApplyScale(2.0);
+                    _currentDisplayMode = ImageDisplayMode.Normal;
+                    break;
                 case "300%":
-                    {
-                        break;
-                    }
+                    ApplyScale(3.0);
+                    _currentDisplayMode = ImageDisplayMode.Normal;
+                    break;
                 case "400%":
-                    {
-                        break;
-                    }
+                    ApplyScale(4.0);
+                    _currentDisplayMode = ImageDisplayMode.Normal;
+                    break;
                 case "500%":
-                    {
-                        break;
-                    }
+                    ApplyScale(5.0);
+                    _currentDisplayMode = ImageDisplayMode.Normal;
+                    break;
                 case "О текущем файле":
                     {
                         break;
